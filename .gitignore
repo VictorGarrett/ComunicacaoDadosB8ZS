@@ -1,0 +1,8 @@
+sfml-bin/libsfml-audio.a
+sfml-bin/libsfml-graphics.a
+sfml-bin/libsfml-main.a
+sfml-bin/libsfml-network.a
+sfml-bin/libsfml-system.a
+sfml-bin/libsfml-window.a
+bin
+objects

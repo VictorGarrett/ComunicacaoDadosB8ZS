@@ -1,5 +1,8 @@
 {
   "files.associations": {
-    "map": "cpp"
+    "map": "cpp",
+    "atomic": "cpp",
+    "ios": "cpp",
+    "xiosbase": "cpp"
   }
 }

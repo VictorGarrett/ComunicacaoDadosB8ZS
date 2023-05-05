@@ -1,22 +1,29 @@
 
+ifeq ($(shell echo "check_os"),"check_os")
+WINDOWS := yes
+else
+WINDOWS := no
+endif
+
+
+
 # Name of the project
 PROJECT_NAME=comdados.exe
 
 # .cpp Files
-CPP_SOURCE=$(wildcard ./source/*.cpp) $(wildcard ./source/core/*.cpp) $(wildcard ./source/render/*.cpp)
+CPP_SOURCE=$(wildcard ./source/*.cpp)
 
 # .h Files
-H_SOURCE=$(wildcard ./include/*.h) $(wildcard ./source/core/*.h)  $(wildcard ./source/render/*.h)
+H_SOURCE=$(wildcard ./include/*.h)
 
 # Object Files
-OBJ=$(patsubst %source/%.cpp,%objects/%.o,$(wildcard source/*.cpp)) $(patsubst %source/%.cpp,%objects/%.o,$(wildcard source/render/*.cpp))  $(patsubst %source/%.cpp,%objects/%.o,$(wildcard source/core/*.cpp))
-
+OBJ=$(subst .cpp,.o,$(subst source,objects,$(CPP_SOURCE)))
 
 # Compiler
 CC=g++
 
 # Flags for Compiler
-CC_FLAGS=-c -I ./include/ -I ./include/core/ -I ./include/render/
+CC_FLAGS=-c -I ./include/
 
 
 # Linker Flags
@@ -32,7 +39,7 @@ all: folders ./bin/$(PROJECT_NAME)
 				@ echo 'Finished buiding binary: $@'
 				@ echo ' '
 
-./objects/%.o: ./source/%.cpp ./include/%.h ./include/core/%.h ./include/render/%.h
+./objects/%.o: ./source/%.cpp ./include/%.h
 				@ echo 'Building target using G++ compiler: $<'
 				$(CC) -o $@ $< $(CC_FLAGS)
 				@ echo ' '
@@ -45,8 +52,16 @@ all: folders ./bin/$(PROJECT_NAME)
 		    @ echo ' '
 
 folders:
-			@mkdir -p objects bin
+ifeq ($(WINDOWS), yes)
+	@ if not exist "objects" mkdir objects	
+else
+	@mkdir -p objects bin
+endif
 
 clean:
-		    @ rd /S /Q objects
-			@ del .\bin\$(PROJECT_NAME)
+ifeq ($(WINDOWS), yes)
+	@ rd /S /Q objects
+	@ del .\bin\$(PROJECT_NAME)
+else
+endif
+		    

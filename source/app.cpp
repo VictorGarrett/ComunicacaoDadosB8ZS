@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "app.h"
-#include "B8ZS.h"
+
 
 
 App::App() {
@@ -8,27 +8,52 @@ App::App() {
     this->window.setFramerateLimit(60);
     graphicsManager = new GraphicsManager(&window);
     eventsManager = new EventsManager(&window);
+
+    mainFont = graphicsManager->loadFont("assets/Pixel.ttf");
+
+    b8zs = new B8ZS();
+
+    button = new TextButton(mainFont, "kkbotao", 50, sf::Color::White, {300.0f, 300.0f});
+    eventsManager->addClickable(button);
 }
 
 App::~App() {
     delete graphicsManager;
     delete eventsManager;
+    delete b8zs;
+
+    eventsManager->removeClickable(button);
+    delete button;
+}
+
+void App::update(){
+    eventsManager->pollAll();
+
+    if(button->isHovering()){
+        button->setFillColor(sf::Color::Red);
+    }
+    else
+        button->setFillColor(sf::Color::White);
+
+    if(button->wasClicked())
+        printf("kk clico no kkbotao\n");
+}
+
+void App::render(){
+    graphicsManager->draw(button);
+    graphicsManager->render();
 }
 
 void App::run() {
-    B8ZS b8zs;
-    TextButton button;
+   
 
     
-    b8zs.encrypt();
+    b8zs->encrypt();
     //button.on_click();
     
-    while (this->window.isOpen()){
-
-        eventsManager->pollAll();
-
-        this->window.clear();
-        this->window.display();
+    while (!eventsManager->isWindowClosed()){
+        update();
+        render();
     }
 }
 

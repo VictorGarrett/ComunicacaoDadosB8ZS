@@ -1,5 +1,4 @@
-#ifndef TEXT_BUTTON_H
-#define TEXT_BUTTON_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -18,4 +17,3 @@ class TextButton: public Clickable, public sf::Text{
         void setLoadedFont(sf::Font* font);
 };
 
-#endif /* TextButton_H */

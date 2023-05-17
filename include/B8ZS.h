@@ -1,3 +1,5 @@
+#pragma once
+
 class B8ZS {
     public: 
         B8ZS();

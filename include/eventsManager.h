@@ -1,10 +1,12 @@
-#ifndef EVENTS_MANAGER_H
-#define EVENTS_MANAGER_H
+#pragma once
 
-#include "clickable.h"
+#include <SFML/Graphics.hpp>
 #include <vector>
 
 #define GET_CLICKABLE_POINTER(x)  static_cast<Clickable*>(&x)
+
+class Clickable;
+class TextInputContainer;
 
 class EventsManager{
 
@@ -13,6 +15,7 @@ class EventsManager{
         sf::Mouse mouse;
         sf::Event currentEvent;
         std::vector<Clickable*> clickables;
+        std::vector<TextInputContainer*> textInputContainers;
         bool windowClosed;
     
     public:
@@ -22,11 +25,12 @@ class EventsManager{
         void addClickable(Clickable* clkbl);
         void removeClickable(Clickable* clkbl);
 
+        void addTextInputContainer(TextInputContainer* container);
+        void removeTextInputContainer(TextInputContainer* container);
+
         void pollAll();
         void closeWindow();
         bool isWindowClosed();
 
 
 };
-
-#endif

@@ -1,4 +1,6 @@
 #include "eventsManager.h"
+#include "clickable.h"
+#include "textInputContainer.h"
 
 EventsManager::EventsManager(sf::RenderWindow* pWindow){
     if(pWindow == NULL)
@@ -29,11 +31,26 @@ void EventsManager::removeClickable(Clickable* clkbl){
     }
 }
 
+void EventsManager::addTextInputContainer(TextInputContainer* container){
+    if(container){
+        textInputContainers.push_back(container);
+    }
+}
+
+void EventsManager::removeTextInputContainer(TextInputContainer* container){
+    if(container){
+        for(auto i = textInputContainers.begin(); i != textInputContainers.end(); i++)
+            if(*i == container){
+                textInputContainers.erase(i);
+                break;
+            }
+    }
+}
+
 void EventsManager::pollAll(){
     while(window->pollEvent(currentEvent)){
             switch (currentEvent.type){
                 case sf::Event::MouseMoved:{
-                    //printf("mouse move event\n"); //Tratando todas as possibilidades na hora de trocar as cores, caso tenha ou não tenha palavras.
                     auto mousePos = window->mapPixelToCoords(mouse.getPosition(*window));
                     for(auto i = clickables.begin(); i != clickables.end(); i++){
                         if((*i)->clickBox.contains((float)mousePos.x, (float)mousePos.y))
@@ -44,16 +61,19 @@ void EventsManager::pollAll(){
                     }
                     break;
                 }
-                case sf::Event::Closed: //Evento da janela fechada, no "X" da janela mesmo;
+                case sf::Event::Closed: //Evento da janela fechada
                     windowClosed = true;
                     break;
 
                 case sf::Event::MouseButtonPressed:{ //Caso alguma tecla do mouse seja ativada;
                 //printf("mouse button pressed event\n");
+                    for(auto i = textInputContainers.begin(); i != textInputContainers.end(); i++)//desseleciona todas as caixas de texto
+                        (*i)->setActive(false);
                     auto mousePos = window->mapPixelToCoords(mouse.getPosition(*window));
                     for(auto i = clickables.begin(); i != clickables.end(); i++){//busca pelo clicavel selecionado e clica
                         if((*i)->clickBox.contains(mousePos.x, mousePos.y))
                             (*i)->clicked = true;
+                            (*i)->onClicked();
                     }
                     break;
                 }
@@ -61,6 +81,38 @@ void EventsManager::pollAll(){
                 //printf("mouse button rel event\n");
                     for(auto i = clickables.begin(); i != clickables.end(); i++)//desclica todos os clicaveis
                             (*i)->clicked = false;
+                    break;
+
+                case sf::Event::TextEntered:
+                    printf("text is entered\n");
+                    for(auto i = textInputContainers.begin(); i != textInputContainers.end(); i++){
+                            (*i)->addCharacter(currentEvent.text.unicode);
+                            (*i)->onTextUpdated();
+                    }
+                    break;
+                
+                case sf::Event::KeyPressed:
+                    switch(currentEvent.key.code){
+                        case sf::Keyboard::Backspace:
+                            for(auto i = textInputContainers.begin(); i != textInputContainers.end(); i++){
+                                (*i)->eraseCharacter();
+                                (*i)->onTextUpdated();
+                            }
+                            break;
+                        case sf::Keyboard::Right:
+                            for(auto i = textInputContainers.begin(); i != textInputContainers.end(); i++){
+                                (*i)->moveCursor(1);
+                                (*i)->onTextUpdated();
+                            }
+                            break;
+                        case sf::Keyboard::Left:
+                            for(auto i = textInputContainers.begin(); i != textInputContainers.end(); i++){
+                                (*i)->moveCursor(-1);
+                                (*i)->onTextUpdated();
+                            }
+                            break;
+                    }
+
                     break;
 
                 //case sf::Event::Resized:

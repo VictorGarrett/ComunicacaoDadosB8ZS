@@ -6,6 +6,9 @@
 #include "textButton.h"
 #include "eventsManager.h"
 #include "B8ZS.h"
+#include "graph.h"
+#include "textBox.h"
+//#include "Vertex.hpp"
 
 class App {
     private:
@@ -14,9 +17,12 @@ class App {
         EventsManager* eventsManager;
 
         sf::Font* mainFont;
-
+        
+        sf::Text* testText;
         TextButton* button;
         B8ZS* b8zs;
+        Graph* testGraph;
+        TextBox* testBox;
 
     public:
         App();

@@ -1,5 +1,4 @@
-#ifndef GRAPHICS_MANAGER_H
-#define GRAPHICS_MANAGER_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <map>
@@ -25,5 +24,3 @@ class GraphicsManager{
         void draw(sf::Drawable* drwbl);
         void render();
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef CLICKABLE_H
-#define CLICKABLE_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -16,12 +15,10 @@ class Clickable{
         bool isHovering();
         bool wasClicked();
         void setClickBox(sf::FloatRect clickBox);
-        //void click();
+        virtual void onClicked() {};
         //void hover();
         //void clear();
 
         friend class EventsManager;
 
 };
-
-#endif

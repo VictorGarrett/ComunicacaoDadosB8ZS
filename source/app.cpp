@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "app.h"
 
-
-
 App::App() {
     this->window.create(sf::VideoMode(1280, 720), "ComDados");
     this->window.setFramerateLimit(60);
@@ -15,6 +13,24 @@ App::App() {
 
     button = new TextButton(mainFont, "kkbotao", 50, sf::Color::White, {300.0f, 300.0f});
     eventsManager->addClickable(button);
+
+    testGraph = new Graph;
+
+    testGraph->setPosition(sf::Vector2f(400, 400));
+    testGraph->setSize(sf::Vector2f(400, 400));
+    testGraph->setRange(-50, 50, -50, 50);
+
+    std::vector<sf::Vector2f> testData{{-30, -5},{0, 35},{10, 0},{20, 20}};
+    testGraph->setData(testData);
+
+    testText = new sf::Text("caxa de testo ->", *mainFont, 30);
+    testText->setPosition(sf::Vector2f(800, 400));
+
+    testBox = new TextBox(mainFont, sf::Vector2f(1100, 400), sf::Vector2f(200, 30));
+
+    eventsManager->addClickable(testBox);
+    eventsManager->addTextInputContainer(testBox);
+
 }
 
 App::~App() {
@@ -41,6 +57,9 @@ void App::update(){
 
 void App::render(){
     graphicsManager->draw(button);
+    graphicsManager->draw(testGraph);
+    graphicsManager->draw(testBox);
+    graphicsManager->draw(testText);
     graphicsManager->render();
 }
 
